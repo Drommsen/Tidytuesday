@@ -3,7 +3,7 @@ title: "TV-Series"
 author: "Georg Olm"
 date: "1/10/2019"
 output: 
-  html_document: 
+  rmarkdown::github_document:
     fig_width: 10
 editor_options: 
   chunk_output_type: console
