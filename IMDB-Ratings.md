@@ -37,6 +37,12 @@ Georg Olm
 
 <!-- ``` -->
 
+UPDATE: Is was looking at different tidy tuesday contributions and the
+Screencast by @drob. The meaning of share seems to differ und not very
+clear. It might not be the viewers share, as I expected, but might be
+the share of votes… or something comletely different. Further research
+should be done in this regard.
+
 ## Share Development
 
 How is the viewers share per season devolping over the years
