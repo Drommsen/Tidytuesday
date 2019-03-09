@@ -1,0 +1,66 @@
+---
+title: "Train-Delay"
+author: "Georg Olm"
+date: "3/9/2019"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggbeeswarm)
+full_trains <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-02-26/full_trains.csv")
+```
+
+```{r}
+cause_var <- c("delay_cause_external_cause",
+               "delay_cause_rail_infrastructure",
+               "delay_cause_traffic_management",
+               "delay_cause_rolling_stock",
+               "delay_cause_station_management",
+               "delay_cause_travelers")
+
+train_delay <- full_trains %>% 
+  select(year,
+       month,
+       avg_delay_late_on_arrival,
+       delay_cause_external_cause,
+       delay_cause_rail_infrastructure,
+       delay_cause_traffic_management,
+       delay_cause_rolling_stock,
+       delay_cause_station_management,
+       delay_cause_travelers) %>% 
+  mutate(mean_cause = apply(select(., cause_var),1,mean), 
+         median_cause = apply(select(., cause_var),1,median))
+
+for (i in 4:9) {
+  train_delay[,i] = ifelse(train_delay[,i] >= train_delay$median_cause, 1,0)
+}
+
+train_delay <-  train_delay %>% 
+  select(year,
+       month,
+       avg_delay_late_on_arrival,
+       delay_cause_external_cause,
+       delay_cause_rail_infrastructure,
+       delay_cause_traffic_management,
+       delay_cause_rolling_stock,
+       delay_cause_station_management,
+       delay_cause_travelers) %>% 
+  gather(cause_delay, is_reason, -avg_delay_late_on_arrival, -year,-month) 
+
+```
+
+```{r}
+train_delay %>% 
+  filter(is_reason == 1) %>% 
+  filter(year == 2016,
+         month == 1) %>% 
+  ggplot(aes(cause_delay, avg_delay_late_on_arrival)) +
+  geom_quasirandom(dodge.width=.1, alpha=0.4)+
+  scale_y_log10()
+
+```
+
